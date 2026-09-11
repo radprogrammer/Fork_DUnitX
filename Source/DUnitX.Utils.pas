@@ -770,16 +770,20 @@ uses
   System.Classes,
   System.Generics.Defaults,
   System.Math,
-  System.StrUtils,
+  {$IFDEF SUPPORT_TALPHACOLOR}
   System.UIConsts,
-  System.UITypes;
+  System.UITypes,
+  {$ENDIF}
+  System.StrUtils;
 {$ELSE}
   Classes,
   Generics.Defaults,
   Math,
-  StrUtils,
+  {$IFDEF SUPPORT_TALPHACOLOR}
   UIConsts,
-  UITypes;
+  UITypes,
+  {$ENDIF}
+  StrUtils;
 {$ENDIF}
 
 var
@@ -1228,6 +1232,7 @@ begin
   Result := True;
 end;
 
+{$IFDEF SUPPORT_TALPHACOLOR}
 function ConvStr2Int(const ASource : TValue; ATarget : PTypeInfo; out AResult : TValue) : Boolean;
 begin
   if ATarget = TypeInfo(TAlphaColor) then
@@ -1238,6 +1243,7 @@ begin
     AResult := TValue.FromOrdinal(ATarget, StrToInt64Def(ASource.AsString, 0));
   Result := True;
 end;
+{$ENDIF}
 
 function ConvStr2Ord(const ASource : TValue; ATarget : PTypeInfo; out AResult : TValue) : Boolean;
 begin
@@ -1467,7 +1473,11 @@ const
     // tkUString
     (
     // tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat, tkString,
+    {$IFDEF SUPPORT_TALPHACOLOR}
     ConvFail, ConvStr2Int, ConvFail, ConvStr2Enum, ConvStr2Float, ConvFail,
+    {$ELSE}
+    ConvFail, ConvStr2Ord, ConvFail, ConvStr2Enum, ConvStr2Float, ConvFail,
+    {$ENDIF}
     // tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString
     ConvStr2Set, ConvFail, ConvFail, ConvFail, ConvFail, ConvFail,
     // tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray
