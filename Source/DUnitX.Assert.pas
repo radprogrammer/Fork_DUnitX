@@ -321,6 +321,7 @@ uses
   System.TypInfo,
   System.Variants;
 {$ELSE}
+  DateUtils,
   Generics.Collections,
   Generics.Defaults,
   Math,
